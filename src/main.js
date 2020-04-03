@@ -2,8 +2,8 @@
 
 const NUMBER_OF_TRIP_POINTS = 3;
 const pageHeaderEl = document.querySelector(`.page-header`);
-const pageTripInfoEl = pageHeaderEl.querySelector(`.trip-main`);
-const pageTripControlsEl = pageTripInfoEl.querySelector(`.trip-controls`);
+const pageTripOverviewEl = pageHeaderEl.querySelector(`.trip-main`);
+const pageTripControlsEl = pageTripOverviewEl.querySelector(`.trip-controls`);
 const pageMainEl = document.querySelector(`main.page-main`);
 const pageTripEventsEl = pageMainEl.querySelector(`.trip-events`);
 
@@ -15,11 +15,14 @@ const renderTripInfoTamplate = () => {
 
         <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
       </div>
-
-      <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
-      </p>
     </section>`
+  );
+};
+const renderTripPriceTemplate = () => {
+  return (
+    `<p class="trip-info__cost">
+      Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+    </p>`
   );
 };
 const renderMenuTamplate = () => {
@@ -308,7 +311,9 @@ const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
 };
 
-render(pageTripInfoEl, renderTripInfoTamplate(), `afterbegin`);
+render(pageTripOverviewEl, renderTripInfoTamplate(), `afterbegin`);
+const pageTripInfoEl = pageTripOverviewEl.querySelector(`.trip-info`);
+render(pageTripInfoEl, renderTripPriceTemplate());
 render(pageTripControlsEl, renderMenuTamplate(), `afterbegin`);
 render(pageTripControlsEl, renderFiltersTamplate());
 render(pageTripEventsEl, renderSortTamplate(), `afterbegin`);
