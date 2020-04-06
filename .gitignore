@@ -11,4 +11,6 @@ Thumbs.db
 *.log*
 node_modules/
 
-# Файлы сборки (допишите самостоятельно)
+# Папка с собранными файлами проекта
+public/bandle.js
+public/bandle.js.map
