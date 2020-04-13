@@ -1,4 +1,38 @@
-export const renderTripPointTamplate = () => {
+import {EVENT_TYPES} from "./const.js";
+import {formatTime, formatDuration, formateFullDate} from "./utils.js";
+
+
+const returnOfferTemplate = (obj) => {
+  return (
+    `<li class="event__offer">
+      <span class="event__offer-title">${obj.description}</span>
+      &plus;
+      &euro;&nbsp;<span class="event__offer-price">${obj.price}</span>
+    </li>`
+  );
+};
+
+const renderMultiTemplate = (arr, func) => {
+  let currentTemplate = ``;
+  arr.forEach((it) => {
+    currentTemplate += func(it);
+  });
+  return currentTemplate;
+};
+
+export const renderTripPointTamplate = (data) => {
+  const {tripPointTitle, tripEventType, tripPointPrice, tripOffer, tripDateStart, tripDateEnd} = data;
+
+  const isStartDate = tripDateStart instanceof Date ? true : false;
+  const isEndDate = tripDateEnd instanceof Date ? true : false;
+
+  const offerTemplate = tripOffer instanceof Array ? renderMultiTemplate(tripOffer, returnOfferTemplate) : ``;
+  const startDate = isStartDate ? formateFullDate(tripDateStart) : ``;
+  const endDate = isEndDate ? formateFullDate(tripDateStart) : ``;
+  const startTime = isStartDate ? formatTime(tripDateStart) : ``;
+  const endTime = isEndDate ? formatTime(tripDateEnd) : ``;
+  const tripDuration = formatDuration(Math.abs((tripDateEnd - tripDateStart)));
+
   return (
     `<ul class="trip-days">
       <li class="trip-days__item  day">
@@ -7,29 +41,25 @@ export const renderTripPointTamplate = () => {
           <li class="trip-events__item">
             <div class="event">
               <div class="event__type">
-                <img class="event__type-icon" width="42" height="42" src="img/icons/drive.png" alt="Event type icon">
+                <img class="event__type-icon" width="42" height="42" src="img/icons/${tripEventType}.png" alt="Event type icon">
               </div>
-              <h3 class="event__title">Drive to Chamonix</h3>
+              <h3 class="event__title">${tripEventType} ${EVENT_TYPES.includes(tripEventType) ? `in` : `to`} ${tripPointTitle}</h3>
               <div class="event__schedule">
                 <p class="event__time">
-                  <time class="event__start-time" datetime="2019-03-18T14:30">14:30</time>
+                  <time class="event__start-time" datetime="${startDate}T${startTime}">${startTime}</time>
                   &mdash;
-                  <time class="event__end-time" datetime="2019-03-18T16:05">16:05</time>
+                  <time class="event__end-time" datetime="${endDate}T${endTime}">${endTime}</time>
                 </p>
-                <p class="event__duration">1H 35M</p>
+                <p class="event__duration">${tripDuration}</p>
               </div>
 
               <p class="event__price">
-                &euro;&nbsp;<span class="event__price-value">160</span>
+                &euro;&nbsp;<span class="event__price-value">${tripPointPrice}</span>
               </p>
 
               <h4 class="visually-hidden">Offers:</h4>
               <ul class="event__selected-offers">
-                <li class="event__offer">
-                  <span class="event__offer-title">Rent a car</span>
-                  &plus;
-                  &euro;&nbsp;<span class="event__offer-price">200</span>
-                </li>
+                ${offerTemplate}
               </ul>
 
               <button class="event__rollup-btn" type="button">
