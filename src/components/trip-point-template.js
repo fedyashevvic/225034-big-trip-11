@@ -1,5 +1,5 @@
 import {EVENT_TYPES} from "./const.js";
-import {formatTime, formatDuration, formateFullDate} from "./utils.js";
+import {formatTime, formatDuration, formateFullDate, formatMonthAndDate} from "./utils.js";
 
 
 const returnOfferTemplate = (obj) => {
@@ -20,7 +20,7 @@ const renderMultiTemplate = (arr, func) => {
   return currentTemplate;
 };
 
-export const renderTripPointTamplate = (data) => {
+export const renderTripPointTamplate = (data, dayCounter, dayDate) => {
   const {tripPointTitle, tripEventType, tripPointPrice, tripOffer, tripDateStart, tripDateEnd} = data;
 
   const isStartDate = tripDateStart instanceof Date ? true : false;
@@ -36,7 +36,10 @@ export const renderTripPointTamplate = (data) => {
   return (
     `<ul class="trip-days">
       <li class="trip-days__item  day">
-        <div class="day__info"></div>
+        <div class="day__info">
+          <span class="day__counter">${dayCounter ? dayCounter : ``}</span>
+          <time class="day__date" datetime="${dayDate ? startDate : ``}">${dayDate ? formatMonthAndDate(dayDate) : ``}</time>  
+        </div>
         <ul class="trip-events__list">
           <li class="trip-events__item">
             <div class="event">

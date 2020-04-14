@@ -13,6 +13,8 @@ const pageTripOverviewEl = pageHeaderEl.querySelector(`.trip-main`);
 const pageTripControlsEl = pageTripOverviewEl.querySelector(`.trip-controls`);
 const pageMainEl = document.querySelector(`main.page-main`);
 const pageTripEventsEl = pageMainEl.querySelector(`.trip-events`);
+let dayCount = 0;
+let currentDate = tempData[1].tripDateStart;
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -25,6 +27,16 @@ render(pageTripControlsEl, renderMenuTamplate(), `afterbegin`);
 render(pageTripControlsEl, renderFiltersTamplate());
 render(pageTripEventsEl, renderSortTamplate(), `afterbegin`);
 render(pageTripEventsEl, renderTripCreationFormTamplate(tempData[0]));
+
 tempData.slice(1).forEach((it) => {
-  render(pageTripEventsEl, renderTripPointTamplate(it));
+  const isNextDay = currentDate.getDate() < it.tripDateStart.getDate() || currentDate === it.tripDateStart ? true : false;
+
+  if (isNextDay) {
+    currentDate = isNextDay ? it.tripDateStart : currentDate;
+    dayCount = isNextDay ? ++dayCount : dayCount;
+    render(pageTripEventsEl, renderTripPointTamplate(it, dayCount, currentDate));
+  } else {
+    render(pageTripEventsEl, renderTripPointTamplate(it, ``, ``));
+  }
+
 });

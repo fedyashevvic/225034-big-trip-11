@@ -56,7 +56,7 @@ export const renderTripCreationFormTamplate = (data) => {
   const isEndDate = tripDateEnd instanceof Date ? true : false;
 
   const startDate = isStartDate ? formateFullCreationDate(tripDateStart) : ``;
-  const endDate = isEndDate ? formateFullCreationDate(tripDateStart) : ``;
+  const endDate = isEndDate ? formateFullCreationDate(tripDateEnd) : ``;
   const startTime = isStartDate ? formatTime(tripDateStart) : ``;
   const endTime = isEndDate ? formatTime(tripDateEnd) : ``;
 

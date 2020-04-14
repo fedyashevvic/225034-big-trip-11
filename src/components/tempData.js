@@ -32,8 +32,8 @@ const returnTempData = () => {
     tripDescription: createRandomArr(descriptions).join(` `),
     tripImage: createRandomArr(tripImages),
     tripOffer: additionalOffers,
-    tripDateStart: new Date(2020, 3, 10, Math.floor(Math.random() * Math.floor(24)), Math.floor(Math.random() * Math.floor(60))),
-    tripDateEnd: new Date(2020, 3, 11, Math.floor(Math.random() * Math.floor(24)), Math.floor(Math.random() * Math.floor(60))),
+    tripDateStart: new Date(2020, 3, Math.floor(1 + Math.random() * (10 - 1)), Math.floor(Math.random() * Math.floor(24)), Math.floor(Math.random() * Math.floor(60))),
+    tripDateEnd: new Date(2020, 3, Math.floor(11 + Math.random() * (20 - 11)), Math.floor(Math.random() * Math.floor(24)), Math.floor(Math.random() * Math.floor(60))),
     tripEventType: eventType[Math.floor(Math.random() * Math.floor(eventType.length))],
     tripPointTitle: TRIP_DESTINATIONS[Math.floor(Math.random() * Math.floor(TRIP_DESTINATIONS.length))],
     tripPointPrice: tripPrice[Math.floor(Math.random() * Math.floor(tripPrice.length))],
@@ -43,5 +43,8 @@ const returnTempData = () => {
 for (let i = 0; i < NUMBER_OF_MOKES; i++) {
   tempData.push(returnTempData());
 }
+tempData.sort((a, b) => {
+  return a.tripDateStart < b.tripDateStart ? -1 : 0;
+});
 
 export {tempData};

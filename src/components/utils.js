@@ -1,4 +1,4 @@
-import {TIME_TARNSFORMATION} from "./const.js";
+import {TIME_TARNSFORMATION, MONTH_NAMES} from "./const.js";
 
 const castTimeFormat = (value) => {
   return value < 10 ? `0${value}` : String(value);
@@ -36,5 +36,8 @@ const formateFullDate = (date) => {
 const formateFullCreationDate = (date) => {
   return `${castTimeFormat(date.getDate())}/${castTimeFormat(date.getMonth())}/${date.getFullYear()}`;
 };
+const formatMonthAndDate = (date) => {
+  return `${MONTH_NAMES[date.getMonth()]} ${castTimeFormat(date.getDate())}`;
+};
 
-export {formatTime, formatDuration, formateFullDate, formateFullCreationDate};
+export {formatTime, formatDuration, formateFullDate, formateFullCreationDate, formatMonthAndDate};
