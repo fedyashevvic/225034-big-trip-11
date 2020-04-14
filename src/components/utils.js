@@ -26,7 +26,7 @@ const formatDuration = (ms) => {
     hours = castTimeFormat(hours - days * H_TO_D);
   }
 
-  return `${days ? days : ``}${days ? `D` : ``} ${hours ? hours : ``}${hours ? `H` : ``} ${minutes ? minutes : ``}${minutes ? `M` : ``}`;
+  return `${days ? `${days}D` : ``} ${hours ? `${hours}H` : ``} ${minutes ? `${minutes}M` : ``}`;
 };
 
 const formateFullDate = (date) => {
