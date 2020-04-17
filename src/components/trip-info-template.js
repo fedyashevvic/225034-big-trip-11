@@ -1,5 +1,6 @@
 import {tempData} from "./tempData.js";
 import {MONTH_NAMES} from "./const.js";
+import {createElement} from "./utils.js";
 
 
 const returnTripTitle = (data) => {
@@ -20,7 +21,7 @@ const returnTripDates = (data) => {
   );
 };
 
-export const renderTripInfoTamplate = () => {
+const renderTripInfoTamplate = () => {
   const tripInfoTitle = returnTripTitle(tempData);
   const tripDates = returnTripDates(tempData);
 
@@ -33,3 +34,21 @@ export const renderTripInfoTamplate = () => {
     </section>`
   );
 };
+
+export default class TripInfoComponent {
+  constructor() {
+    this._element = null;
+  }
+  getTemplate() {
+    return renderTripInfoTamplate();
+  }
+  getElement() {
+    if (!this._element) {
+      return createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,5 +1,5 @@
 import {TRANSPORT_TYPES, TRIP_DESTINATIONS, EVENT_TYPES} from "./const.js";
-import {formatTime, formateFullCreationDate} from "./utils.js";
+import {formatTime, formateFullCreationDate, createElement} from "./utils.js";
 
 const returnTransportTemplate = (type) => {
   return (
@@ -49,7 +49,7 @@ const renderMultiTemplate = (arr, func) => {
 };
 
 
-export const renderTripCreationFormTamplate = (data) => {
+const renderTripCreationFormTamplate = (data) => {
   const {tripDescription, tripImage, tripOffer, tripDateStart, tripDateEnd, tripPointTitle} = data;
 
   const isStartDate = tripDateStart instanceof Date ? true : false;
@@ -145,3 +145,22 @@ export const renderTripCreationFormTamplate = (data) => {
     </form>`
   );
 };
+
+export default class TripEditComponent {
+  constructor(data) {
+    this._data = data;
+    this._element = null;
+  }
+  getTemplate() {
+    return renderTripCreationFormTamplate(this._data);
+  }
+  getElement() {
+    if (!this._element) {
+      return createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

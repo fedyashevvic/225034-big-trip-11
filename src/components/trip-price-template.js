@@ -1,4 +1,5 @@
 import {tempData} from "./tempData.js";
+import {createElement} from "./utils.js";
 
 const calculateTotalPrice = (data) => {
   let total = 0;
@@ -8,7 +9,7 @@ const calculateTotalPrice = (data) => {
   return total;
 };
 
-export const renderTripPriceTemplate = () => {
+const renderTripPriceTemplate = () => {
   const totalPrice = calculateTotalPrice(tempData);
   return (
     `<p class="trip-info__cost">
@@ -16,3 +17,21 @@ export const renderTripPriceTemplate = () => {
     </p>`
   );
 };
+
+export default class TripPriceComponent {
+  constructor() {
+    this._element = null;
+  }
+  getTemplate() {
+    return renderTripPriceTemplate();
+  }
+  getElement() {
+    if (!this._element) {
+      return createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}
