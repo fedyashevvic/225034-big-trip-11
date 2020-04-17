@@ -28,20 +28,30 @@ const renderElement = (container, element, place = BEFOREEND) => {
   }
 };
 
-const renderTask = () => {
-  tempData.forEach((it) => {
-    const isNextDay = currentDate.getDate() < it.tripDateStart.getDate() || currentDate === it.tripDateStart ? true : false;
-    let tripPoint;
-    if (isNextDay) {
-      currentDate = isNextDay ? it.tripDateStart : currentDate;
-      dayCount = isNextDay ? ++dayCount : dayCount;
-      tripPoint = new TripPointComponent(it, dayCount, currentDate);
-    } else {
-      tripPoint = new TripPointComponent(it, ``, ``);
-    }
-    renderElement(pageTripEventsEl, tripPoint.getElement());
-    renderElement(pageTripEventsEl, new TripEditComponent(it).getElement());
-  });
+const renderTask = (element, data) => {
+  const isNextDay = currentDate.getDate() < data.tripDateStart.getDate() || currentDate === data.tripDateStart ? true : false;
+  let tripPointElement = new TripPointComponent(data, ``, ``);
+  const tripEditElement = new TripEditComponent(data);
+
+  const editButtonHandler = () => {
+    element.replaceChild(tripEditElement.getElement(), tripPointElement.getElement());
+  };
+  const saveEditHandler = () => {
+    element.replaceChild(tripPointElement.getElement(), tripEditElement.getElement());
+  };
+
+  if (isNextDay) {
+    currentDate = isNextDay ? data.tripDateStart : currentDate;
+    dayCount = isNextDay ? ++dayCount : dayCount;
+    tripPointElement = new TripPointComponent(data, dayCount, currentDate);
+  }
+  const editButton = tripPointElement.getElement().querySelector(`.event__rollup-btn`);
+  const saveEditButton = tripEditElement.getElement();
+
+  editButton.addEventListener(`click`, editButtonHandler);
+  saveEditButton.addEventListener(`submit`, saveEditHandler);
+
+  renderElement(element, tripPointElement.getElement());
 };
 
 renderElement(pageTripOverviewEl, new TripInfoComponent().getElement(), AFTERBEGIN);
@@ -51,4 +61,6 @@ renderElement(pageTripControlsEl, new TripMenuComponent().getElement(), AFTERBEG
 renderElement(pageTripControlsEl, new TripFilterComponent().getElement());
 renderElement(pageTripEventsEl, new TripSortComponent().getElement());
 
-renderTask();
+tempData.forEach((it) => {
+  renderTask(pageTripEventsEl, it);
+});
