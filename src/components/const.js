@@ -25,4 +25,8 @@ const RenderPlace = {
   BEFOREEND: `beforeend`,
 };
 
-export {TRANSPORT_TYPES, TRIP_DESTINATIONS, EVENT_TYPES, TIME_TARNSFORMATION, MONTH_NAMES, RenderPlace};
+const Key = {
+  ESC: `Escape`,
+};
+
+export {TRANSPORT_TYPES, TRIP_DESTINATIONS, EVENT_TYPES, TIME_TARNSFORMATION, MONTH_NAMES, RenderPlace, Key};

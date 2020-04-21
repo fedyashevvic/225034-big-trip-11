@@ -5,8 +5,9 @@ import TripFilterComponent from './components/site-filters-template.js';
 import TripSortComponent from './components/site-sort-template.js';
 import TripEditComponent from './components/site-form-template.js';
 import TripPointComponent from './components/trip-point-template.js';
+import NoPointComponent from "./components/no-point-template.js";
 import {tempData} from "./components/tempData.js";
-import {RenderPlace} from "./components/const.js";
+import {RenderPlace, Key} from "./components/const.js";
 
 const {BEFOREEND, AFTERBEGIN} = RenderPlace;
 const pageHeaderEl = document.querySelector(`.page-header`);
@@ -14,8 +15,10 @@ const pageTripOverviewEl = pageHeaderEl.querySelector(`.trip-main`);
 const pageTripControlsEl = pageTripOverviewEl.querySelector(`.trip-controls`);
 const pageMainEl = document.querySelector(`main.page-main`);
 const pageTripEventsEl = pageMainEl.querySelector(`.trip-events`);
+const pageTripInfoEl = pageTripOverviewEl.querySelector(`.trip-info`);
+
 let dayCount = 0;
-let currentDate = tempData[0].tripDateStart;
+let currentDate = tempData.length ? tempData[0].tripDateStart : ``;
 
 const renderElement = (container, element, place = BEFOREEND) => {
   switch (place) {
@@ -35,6 +38,13 @@ const renderTask = (element, data) => {
 
   const editButtonHandler = () => {
     element.replaceChild(tripEditElement.getElement(), tripPointElement.getElement());
+    const closeOnEsc = (evt) => {
+      if (evt.key === Key.ESC) {
+        saveEditHandler();
+        window.removeEventListener(`keydown`, closeOnEsc);
+      }
+    };
+    window.addEventListener(`keydown`, closeOnEsc);
   };
   const saveEditHandler = () => {
     element.replaceChild(tripPointElement.getElement(), tripEditElement.getElement());
@@ -54,13 +64,17 @@ const renderTask = (element, data) => {
   renderElement(element, tripPointElement.getElement());
 };
 
-renderElement(pageTripOverviewEl, new TripInfoComponent().getElement(), AFTERBEGIN);
-const pageTripInfoEl = pageTripOverviewEl.querySelector(`.trip-info`);
 renderElement(pageTripInfoEl, new TripPriceComponent().getElement());
 renderElement(pageTripControlsEl, new TripMenuComponent().getElement(), AFTERBEGIN);
 renderElement(pageTripControlsEl, new TripFilterComponent().getElement());
-renderElement(pageTripEventsEl, new TripSortComponent().getElement());
 
-tempData.forEach((it) => {
-  renderTask(pageTripEventsEl, it);
-});
+if (!tempData.length) {
+  renderElement(pageTripEventsEl, new NoPointComponent().getElement());
+} else {
+  renderElement(pageTripInfoEl, new TripInfoComponent().getElement(), AFTERBEGIN);
+  renderElement(pageTripEventsEl, new TripSortComponent().getElement());
+  tempData.forEach((it) => {
+    renderTask(pageTripEventsEl, it);
+  });
+}
+
