@@ -1,6 +1,8 @@
-export const renderSortTamplate = () => {
+import {createElement} from "./utils.js";
+
+const renderSortTamplate = () => {
   return (
-    `<h2 class="visually-hidden">Trip events</h2>
+    `<div><h2 class="visually-hidden">Trip events</h2>
       <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
         <span class="trip-sort__item  trip-sort__item--day"></span>
 
@@ -24,6 +26,25 @@ export const renderSortTamplate = () => {
         </div>
 
         <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
-      </form>`
+      </form></div>`
   );
 };
+
+
+export default class TripSortComponent {
+  constructor() {
+    this._element = null;
+  }
+  getTemplate() {
+    return renderSortTamplate();
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

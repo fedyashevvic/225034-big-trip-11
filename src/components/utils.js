@@ -40,4 +40,11 @@ const formatMonthAndDate = (date) => {
   return `${MONTH_NAMES[date.getMonth()]} ${castTimeFormat(date.getDate())}`;
 };
 
-export {formatTime, formatDuration, formateFullDate, formateFullCreationDate, formatMonthAndDate};
+const createElement = (template) => {
+  const newEl = document.createElement(`div`);
+  newEl.innerHTML = template;
+
+  return newEl.firstChild;
+};
+
+export {formatTime, formatDuration, formateFullDate, formateFullCreationDate, formatMonthAndDate, createElement};

@@ -1,5 +1,5 @@
 import {TRANSPORT_TYPES, TRIP_DESTINATIONS, EVENT_TYPES} from "./const.js";
-import {formatTime, formateFullCreationDate} from "./utils.js";
+import {formatTime, formateFullCreationDate, createElement} from "./utils.js";
 
 const returnTransportTemplate = (type) => {
   return (
@@ -49,8 +49,8 @@ const renderMultiTemplate = (arr, func) => {
 };
 
 
-export const renderTripCreationFormTamplate = (data) => {
-  const {tripDescription, tripImage, tripOffer, tripDateStart, tripDateEnd, tripPointTitle} = data;
+const renderTripCreationFormTamplate = (data) => {
+  const {tripDescription, tripEventType, tripImage, tripOffer, tripDateStart, tripDateEnd, tripPointTitle} = data;
 
   const isStartDate = tripDateStart instanceof Date ? true : false;
   const isEndDate = tripDateEnd instanceof Date ? true : false;
@@ -72,7 +72,7 @@ export const renderTripCreationFormTamplate = (data) => {
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
             <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+            <img class="event__type-icon" width="17" height="17" src="img/icons/${tripEventType}.png" alt="Event type icon">
           </label>
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -91,7 +91,7 @@ export const renderTripCreationFormTamplate = (data) => {
 
         <div class="event__field-group  event__field-group--destination">
           <label class="event__label  event__type-output" for="event-destination-1">
-            Flight to
+          ${tripEventType} ${EVENT_TYPES.includes(tripEventType) ? `in` : `to`} 
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${tripPointTitle}" list="destination-list-1">
           <datalist id="destination-list-1">
@@ -145,3 +145,22 @@ export const renderTripCreationFormTamplate = (data) => {
     </form>`
   );
 };
+
+export default class TripEditComponent {
+  constructor(data) {
+    this._data = data;
+    this._element = null;
+  }
+  getTemplate() {
+    return renderTripCreationFormTamplate(this._data);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

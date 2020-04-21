@@ -1,5 +1,5 @@
 import {EVENT_TYPES} from "./const.js";
-import {formatTime, formatDuration, formateFullDate, formatMonthAndDate} from "./utils.js";
+import {formatTime, formatDuration, formateFullDate, formatMonthAndDate, createElement} from "./utils.js";
 
 
 const returnOfferTemplate = (obj) => {
@@ -20,7 +20,7 @@ const renderMultiTemplate = (arr, func) => {
   return currentTemplate;
 };
 
-export const renderTripPointTamplate = (data, dayCounter, dayDate) => {
+const renderTripPointTamplate = (data, dayCounter, dayDate) => {
   const {tripPointTitle, tripEventType, tripPointPrice, tripOffer, tripDateStart, tripDateEnd} = data;
 
   const isStartDate = tripDateStart instanceof Date ? true : false;
@@ -73,3 +73,25 @@ export const renderTripPointTamplate = (data, dayCounter, dayDate) => {
         </ul>`
   );
 };
+
+
+export default class TripPointComponent {
+  constructor(data, dayCounter, dayDate) {
+    this._data = data;
+    this._dayCounter = dayCounter;
+    this._dayDate = dayDate;
+    this._element = null;
+  }
+  getTemplate() {
+    return renderTripPointTamplate(this._data, this._dayCounter, this._dayDate);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}
