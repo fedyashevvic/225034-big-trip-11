@@ -1,7 +1,6 @@
 import {tempData} from "./tempData.js";
 import {MONTH_NAMES} from "./const.js";
-import {createElement} from "./utils.js";
-
+import AbstractComponent from "./abstract-task.js";
 
 const returnTripTitle = (data) => {
   const startLocation = data[0].tripPointTitle;
@@ -33,20 +32,8 @@ const renderTripInfoTamplate = () => {
   );
 };
 
-export default class TripInfoComponent {
-  constructor() {
-    this._element = null;
-  }
+export default class TripInfoComponent extends AbstractComponent {
   getTemplate() {
     return renderTripInfoTamplate();
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

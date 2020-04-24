@@ -1,6 +1,6 @@
 import {EVENT_TYPES} from "./const.js";
-import {formatTime, formatDuration, formateFullDate, formatMonthAndDate, createElement} from "./utils.js";
-
+import {formatTime, formatDuration, formateFullDate, formatMonthAndDate} from "./utils.js";
+import AbstractComponent from "./abstract-task.js";
 
 const returnOfferTemplate = (obj) => {
   return (
@@ -74,24 +74,14 @@ const renderTripPointTamplate = (data, dayCounter, dayDate) => {
   );
 };
 
-
-export default class TripPointComponent {
+export default class TripPointComponent extends AbstractComponent {
   constructor(data, dayCounter, dayDate) {
+    super();
     this._data = data;
     this._dayCounter = dayCounter;
     this._dayDate = dayDate;
-    this._element = null;
   }
   getTemplate() {
     return renderTripPointTamplate(this._data, this._dayCounter, this._dayDate);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

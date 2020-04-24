@@ -1,5 +1,5 @@
 import {tempData} from "./tempData.js";
-import {createElement} from "./utils.js";
+import AbstractComponent from "./abstract-task.js";
 
 const calculateTotalPrice = (data) => {
   let total = 0;
@@ -18,20 +18,8 @@ const renderTripPriceTemplate = () => {
   );
 };
 
-export default class TripPriceComponent {
-  constructor() {
-    this._element = null;
-  }
+export default class TripPriceComponent extends AbstractComponent {
   getTemplate() {
     return renderTripPriceTemplate();
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

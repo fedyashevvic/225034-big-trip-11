@@ -1,5 +1,6 @@
 import {TRANSPORT_TYPES, TRIP_DESTINATIONS, EVENT_TYPES} from "./const.js";
-import {formatTime, formateFullCreationDate, createElement} from "./utils.js";
+import {formatTime, formateFullCreationDate} from "./utils.js";
+import AbstractComponent from "./abstract-task.js";
 
 const returnTransportTemplate = (type) => {
   return (
@@ -146,21 +147,12 @@ const renderTripCreationFormTamplate = (data) => {
   );
 };
 
-export default class TripEditComponent {
+export default class TripEditComponent extends AbstractComponent {
   constructor(data) {
+    super();
     this._data = data;
-    this._element = null;
   }
   getTemplate() {
     return renderTripCreationFormTamplate(this._data);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

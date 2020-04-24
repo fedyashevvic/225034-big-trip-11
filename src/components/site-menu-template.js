@@ -1,4 +1,4 @@
-import {createElement} from "./utils.js";
+import AbstractComponent from "./abstract-task.js";
 
 const renderMenuTamplate = () => {
   return (
@@ -10,21 +10,9 @@ const renderMenuTamplate = () => {
   );
 };
 
-export default class TripMenuComponent {
-  constructor() {
-    this._element = null;
-  }
+export default class TripMenuComponent extends AbstractComponent {
   getTemplate() {
     return renderMenuTamplate();
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }
 

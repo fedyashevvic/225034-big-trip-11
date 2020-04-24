@@ -1,4 +1,4 @@
-import {createElement} from "./utils.js";
+import AbstractComponent from "./abstract-task.js";
 
 const renderFiltersTamplate = () => {
   return (
@@ -24,21 +24,8 @@ const renderFiltersTamplate = () => {
   );
 };
 
-export default class TripFilterComponent {
-  constructor() {
-    this._element = null;
-  }
+export default class TripFilterComponent extends AbstractComponent {
   getTemplate() {
     return renderFiltersTamplate();
   }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
-  }
 }
-

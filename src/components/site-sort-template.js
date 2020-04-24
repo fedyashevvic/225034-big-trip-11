@@ -1,4 +1,5 @@
-import {createElement} from "./utils.js";
+import AbstractComponent from "./abstract-task.js";
+
 
 const renderSortTamplate = () => {
   return (
@@ -30,21 +31,8 @@ const renderSortTamplate = () => {
   );
 };
 
-
-export default class TripSortComponent {
-  constructor() {
-    this._element = null;
-  }
+export default class TripSortComponent extends AbstractComponent {
   getTemplate() {
     return renderSortTamplate();
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }
