@@ -7,9 +7,10 @@ import TripEditComponent from './components/site-form-template.js';
 import TripPointComponent from './components/trip-point-template.js';
 import NoPointComponent from "./components/no-point-template.js";
 import {tempData} from "./components/tempData.js";
-import {RenderPlace, Key} from "./components/const.js";
+import {Key, RenderPlace} from "./components/const.js";
+import {renderElement, replaceElement} from "./utils/render.js";
 
-const {BEFOREEND, AFTERBEGIN} = RenderPlace;
+const {AFTERBEGIN} = RenderPlace;
 const pageHeaderEl = document.querySelector(`.page-header`);
 const pageTripOverviewEl = pageHeaderEl.querySelector(`.trip-main`);
 const pageTripControlsEl = pageTripOverviewEl.querySelector(`.trip-controls`);
@@ -20,24 +21,13 @@ const pageTripInfoEl = pageTripOverviewEl.querySelector(`.trip-info`);
 let dayCount = 0;
 let currentDate = tempData.length ? tempData[0].tripDateStart : ``;
 
-const renderElement = (container, element, place = BEFOREEND) => {
-  switch (place) {
-    case AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
-
 const renderTask = (element, data) => {
   const isNextDay = currentDate.getDate() < data.tripDateStart.getDate() || currentDate === data.tripDateStart ? true : false;
   let tripPointElement = new TripPointComponent(data, ``, ``);
   const tripEditElement = new TripEditComponent(data);
 
   const editButtonHandler = () => {
-    element.replaceChild(tripEditElement.getElement(), tripPointElement.getElement());
+    replaceElement(element, tripEditElement, tripPointElement);
     const closeOnEsc = (evt) => {
       if (evt.key === Key.ESC) {
         saveEditHandler();
@@ -47,7 +37,7 @@ const renderTask = (element, data) => {
     window.addEventListener(`keydown`, closeOnEsc);
   };
   const saveEditHandler = () => {
-    element.replaceChild(tripPointElement.getElement(), tripEditElement.getElement());
+    replaceElement(element, tripPointElement, tripEditElement);
   };
 
   if (isNextDay) {
@@ -55,24 +45,22 @@ const renderTask = (element, data) => {
     dayCount = isNextDay ? ++dayCount : dayCount;
     tripPointElement = new TripPointComponent(data, dayCount, currentDate);
   }
-  const editButton = tripPointElement.getElement().querySelector(`.event__rollup-btn`);
-  const saveEditButton = tripEditElement.getElement();
 
-  editButton.addEventListener(`click`, editButtonHandler);
-  saveEditButton.addEventListener(`submit`, saveEditHandler);
+  tripPointElement.setEditButtonClickEvt(editButtonHandler);
+  tripEditElement.setFormSubmitEvt(saveEditHandler);
 
-  renderElement(element, tripPointElement.getElement());
+  renderElement(element, tripPointElement);
 };
 
-renderElement(pageTripInfoEl, new TripPriceComponent().getElement());
-renderElement(pageTripControlsEl, new TripMenuComponent().getElement(), AFTERBEGIN);
-renderElement(pageTripControlsEl, new TripFilterComponent().getElement());
+renderElement(pageTripInfoEl, new TripPriceComponent());
+renderElement(pageTripControlsEl, new TripMenuComponent(), AFTERBEGIN);
+renderElement(pageTripControlsEl, new TripFilterComponent());
 
 if (!tempData.length) {
-  renderElement(pageTripEventsEl, new NoPointComponent().getElement());
+  renderElement(pageTripEventsEl, new NoPointComponent());
 } else {
-  renderElement(pageTripInfoEl, new TripInfoComponent().getElement(), AFTERBEGIN);
-  renderElement(pageTripEventsEl, new TripSortComponent().getElement());
+  renderElement(pageTripInfoEl, new TripInfoComponent(), AFTERBEGIN);
+  renderElement(pageTripEventsEl, new TripSortComponent());
   tempData.forEach((it) => {
     renderTask(pageTripEventsEl, it);
   });

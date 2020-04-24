@@ -155,4 +155,7 @@ export default class TripEditComponent extends AbstractComponent {
   getTemplate() {
     return renderTripCreationFormTamplate(this._data);
   }
+  setFormSubmitEvt(cb) {
+    this.getElement().addEventListener(`submit`, cb);
+  }
 }

@@ -84,4 +84,7 @@ export default class TripPointComponent extends AbstractComponent {
   getTemplate() {
     return renderTripPointTamplate(this._data, this._dayCounter, this._dayDate);
   }
+  setEditButtonClickEvt(cb) {
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, cb);
+  }
 }
