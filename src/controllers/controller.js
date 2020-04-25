@@ -7,8 +7,27 @@ import TripEditComponent from '../components/site-form-template.js';
 import TripPointComponent from '../components/trip-point-template.js';
 import NoPointComponent from "../components/no-point-template.js";
 import {tempData} from "../components/tempData.js";
-import {Key, RenderPlace} from "../components/const.js";
+import {Key, RenderPlace, SortType} from "../components/const.js";
 import {renderElement, replaceElement} from "../utils/render.js";
+
+const sortData = (type) => {
+  const {EVENT, TIME, PRICE} = SortType;
+  const newData = tempData.slice();
+  let sortedPoints = [];
+
+  switch (type) {
+    case EVENT:
+      sortedPoints = newData.sort((a, b) => a.tripEventType < b.tripEventType ? -1 : 0);
+      break;
+    case TIME:
+      sortedPoints = newData.sort((a, b) => a.tripDateStart < b.tripDateStart ? -1 : 0);
+      break;
+    case PRICE:
+      sortedPoints = newData.sort((a, b) => b.tripPointPrice - a.tripPointPrice);
+      break;
+  }
+  return sortedPoints;
+};
 
 export default class ControllerComponent {
   constructor() {
@@ -27,6 +46,7 @@ export default class ControllerComponent {
     const pageMainEl = document.querySelector(`main.page-main`);
     const pageTripEventsEl = pageMainEl.querySelector(`.trip-events`);
     const pageTripInfoEl = pageTripOverviewEl.querySelector(`.trip-info`);
+    let isFirstRendering = true;
 
     let dayCount = 0;
     let currentDate = tempData.length ? tempData[0].tripDateStart : ``;
@@ -49,7 +69,7 @@ export default class ControllerComponent {
       const saveEditHandler = () => {
         replaceElement(element, tripPointElement, tripEditElement);
       };
-      if (isNextDay) {
+      if (isNextDay && isFirstRendering) {
         currentDate = isNextDay ? data.tripDateStart : currentDate;
         dayCount = isNextDay ? ++dayCount : dayCount;
         tripPointElement = new TripPointComponent(data, dayCount, currentDate);
@@ -67,6 +87,17 @@ export default class ControllerComponent {
     } else {
       renderElement(pageTripInfoEl, this._tripInfo, AFTERBEGIN);
       renderElement(pageTripEventsEl, this._sort);
+      this._sort.setClickListener(() => {
+        const sortedTasks = sortData(this._sort.getSortType());
+        const currentTasks = document.querySelectorAll(`.trip-days`);
+        isFirstRendering = false;
+
+        currentTasks.forEach((it) => it.remove());
+
+        sortedTasks.forEach((it) => {
+          renderTask(pageTripEventsEl, it);
+        });
+      });
       tempData.forEach((it) => {
         renderTask(pageTripEventsEl, it);
       });

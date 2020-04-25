@@ -29,4 +29,10 @@ const Key = {
   ESC: `Escape`,
 };
 
-export {TRANSPORT_TYPES, TRIP_DESTINATIONS, EVENT_TYPES, TIME_TARNSFORMATION, MONTH_NAMES, RenderPlace, Key};
+const SortType = {
+  EVENT: `sort-event`,
+  TIME: `sort-time`,
+  PRICE: `sort-price`
+};
+
+export {TRANSPORT_TYPES, TRIP_DESTINATIONS, EVENT_TYPES, TIME_TARNSFORMATION, MONTH_NAMES, RenderPlace, Key, SortType};
