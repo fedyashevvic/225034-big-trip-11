@@ -16,8 +16,15 @@ export default class AbstractComponent {
     }
     return this._element;
   }
+  rerender() {
+    const oldElement = this.getElement();
+    const parent = oldElement.parentElement;
+    this.removeElement();
+    const newElement = this.getElement();
+
+    parent.replaceChild(oldElement, newElement);
+  }
   removeElement() {
-    this.getElement().remove();
     this._element = null;
   }
 }

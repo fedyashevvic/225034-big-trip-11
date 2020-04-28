@@ -8,14 +8,17 @@ let dayCount = 0;
 let currentDate = tempData.length ? tempData[0].tripDateStart : ``;
 
 export default class PointController {
-  constructor(container, isFirst) {
+  constructor(container, isFirst, onDataChange) {
     this._container = container;
     this._isFirstRendering = isFirst;
+    this._onDataChange = onDataChange;
     this._tripPointElement = null;
     this._tripEditElement = null;
   }
   renderPoint(data) {
     const isNextDay = currentDate.getDate() < data.tripDateStart.getDate() || currentDate === data.tripDateStart ? true : false;
+    const oldTripPointElement = this._tripPointElement;
+    const oldTripEditElement = this._tripEditElement;
 
     this._tripPointElement = new TripPointComponent(data, ``, ``);
     this._tripEditElement = new TripEditComponent(data);
@@ -31,7 +34,17 @@ export default class PointController {
     this._tripEditElement.setFormSubmitEvt(() => {
       this._savePointChanges();
     });
-    renderElement(this._container, this._tripPointElement);
+    this._tripEditElement.setFavoriteevent(() => {
+      this._onDataChange(data, Object.assign({}, data, {
+        isFavorite: !data.isFavorite,
+      }));
+    });
+    if (oldTripPointElement && oldTripEditElement) {
+      replaceElement(oldTripPointElement, this._tripPointElement);
+      replaceElement(oldTripEditElement, this._tripEditElement);
+    } else {
+      renderElement(this._container, this._tripPointElement);
+    }
   }
 
   _editPointHandler() {

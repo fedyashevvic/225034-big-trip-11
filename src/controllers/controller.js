@@ -13,9 +13,10 @@ const {AFTERBEGIN} = RenderPlace;
 const pageTripControlsEl = document.querySelector(`.trip-controls`);
 const pageTripEventsEl = document.querySelector(`.trip-events`);
 const pageTripInfoEl = document.querySelector(`.trip-info`);
-const sortData = (type) => {
+
+const sortData = (type, data) => {
   const {EVENT, TIME, PRICE} = SortType;
-  const newData = tempData.slice();
+  const newData = data.slice();
   let sortedPoints = [];
 
   switch (type) {
@@ -32,9 +33,9 @@ const sortData = (type) => {
   return sortedPoints;
 };
 
-const renderPoints = (container, points, isFirst) => {
+const renderPoints = (container, points, isFirst, onDataChange) => {
   return points.map((point) => {
-    const pointController = new PointController(container, isFirst);
+    const pointController = new PointController(container, isFirst, onDataChange);
     pointController.renderPoint(point);
     return pointController;
   });
@@ -48,14 +49,16 @@ export default class ControllerComponent {
     this._sort = new TripSortComponent();
     this._noPoint = new NoPointComponent();
     this._isFirstRendering = true;
-
+    this._data = tempData;
     this._renderedPoints = [];
+
+    this._onDataChange = this._onDataChange.bind(this);
   }
   render() {
     renderElement(pageTripInfoEl, this._tripPrice);
     renderElement(pageTripControlsEl, this._menu, AFTERBEGIN);
     renderElement(pageTripControlsEl, this._filters);
-    if (!tempData.length) {
+    if (!this._data.length) {
       renderElement(pageTripEventsEl, this._noPoint);
     } else {
       renderElement(pageTripInfoEl, this._tripInfo, AFTERBEGIN);
@@ -63,15 +66,25 @@ export default class ControllerComponent {
       this._sort.setClickListener(() => {
         this._sortHandler();
       });
-      this._renderedPoints = renderPoints(pageTripEventsEl, tempData, this._isFirstRendering);
+      this._renderedPoints = renderPoints(pageTripEventsEl, this._data, this._isFirstRendering, this._onDataChange);
     }
   }
   _sortHandler() {
-    const sortedTasks = sortData(this._sort.getSortType());
+    const sortedTasks = sortData(this._sort.getSortType(), this._data);
     const currentTasks = document.querySelectorAll(`.trip-days`);
     currentTasks.forEach((it) => it.remove());
     this._isFirstRendering = false;
 
-    this._renderedPoints = renderPoints(pageTripEventsEl, sortedTasks, this._isFirstRendering);
+    this._renderedPoints = renderPoints(pageTripEventsEl, sortedTasks, this._isFirstRendering, this._onDataChange);
+  }
+  _onDataChange(oldData, newData) {
+    const index = this._data.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      return;
+    }
+
+    this._data = [].concat(this._data.slice(0, index), newData, this._data.slice(index + 1));
+    this._renderedPoints[index].renderPoint(this._data[index]);
   }
 }

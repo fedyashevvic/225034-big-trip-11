@@ -37,6 +37,7 @@ const returnTempData = () => {
     tripEventType: eventType[Math.floor(Math.random() * Math.floor(eventType.length))],
     tripPointTitle: TRIP_DESTINATIONS[Math.floor(Math.random() * Math.floor(TRIP_DESTINATIONS.length))],
     tripPointPrice: tripPrice[Math.floor(Math.random() * Math.floor(tripPrice.length))],
+    isFavorite: Math.random() > 0.5,
   };
 };
 
