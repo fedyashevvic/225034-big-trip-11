@@ -1,5 +1,5 @@
 import {EVENT_TYPES} from "./const.js";
-import {formatTime, formatDuration, formateFullDate, formatMonthAndDate} from "./utils.js";
+import {formatTime, formatDuration, formateFullDate, formatMonthAndDate} from "../utils/utils.js";
 import AbstractComponent from "./abstract-task.js";
 
 const returnOfferTemplate = (obj) => {

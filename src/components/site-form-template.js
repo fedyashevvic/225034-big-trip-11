@@ -1,5 +1,5 @@
 import {TRANSPORT_TYPES, TRIP_DESTINATIONS, EVENT_TYPES} from "./const.js";
-import {formatTime, formateFullCreationDate} from "./utils.js";
+import {formatTime, formateFullCreationDate} from "../utils/utils.js";
 import AbstractComponent from "./abstract-task.js";
 
 const returnTransportTemplate = (type) => {

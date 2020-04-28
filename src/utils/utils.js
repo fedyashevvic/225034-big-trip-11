@@ -1,4 +1,4 @@
-import {TIME_TARNSFORMATION, MONTH_NAMES} from "./const.js";
+import {TIME_TARNSFORMATION, MONTH_NAMES} from "../components/const.js";
 
 const castTimeFormat = (value) => {
   return value < 10 ? `0${value}` : String(value);

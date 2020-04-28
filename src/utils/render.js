@@ -15,8 +15,15 @@ const renderElement = (container, companent, place = BEFOREEND) => {
   }
 };
 
-const replaceElement = (container, elementToRemove, elementToAdd) => {
-  container.replaceChild(elementToRemove.getElement(), elementToAdd.getElement());
+const replaceElement = (elementToRemove, elementToAdd) => {
+  const parent = elementToRemove.getElement().parentElement;
+  const oldElement = elementToRemove.getElement();
+  const newElement = elementToAdd.getElement();
+
+  const isExist = !!(parent, oldElement, newElement);
+  if (isExist && parent.contains(oldElement)) {
+    parent.replaceChild(newElement, oldElement);
+  }
 };
 
 export {renderElement, replaceElement};
