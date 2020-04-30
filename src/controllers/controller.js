@@ -66,7 +66,7 @@ export default class ControllerComponent {
       this._sort.setClickListener(() => {
         this._sortHandler();
       });
-      this._renderedPoints = renderPoints(pageTripEventsEl, this._data, this._isFirstRendering, this._onDataChange);
+      this._renderedPoints = [].concat(renderPoints(pageTripEventsEl, this._data, this._isFirstRendering, this._onDataChange));
     }
   }
   _sortHandler() {
@@ -75,7 +75,7 @@ export default class ControllerComponent {
     currentTasks.forEach((it) => it.remove());
     this._isFirstRendering = false;
 
-    this._renderedPoints = renderPoints(pageTripEventsEl, sortedTasks, this._isFirstRendering, this._onDataChange);
+    this._renderedPoints = [].concat(renderPoints(pageTripEventsEl, sortedTasks, this._isFirstRendering, this._onDataChange));
   }
   _onDataChange(oldData, newData) {
     const index = this._data.findIndex((it) => it === oldData);

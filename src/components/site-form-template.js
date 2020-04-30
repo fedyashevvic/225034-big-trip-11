@@ -168,7 +168,7 @@ export default class TripEditComponent extends AbstractComponent {
   setFormSubmitEvt(cb) {
     this.getElement().addEventListener(`submit`, cb);
   }
-  setFavoriteevent(cb) {
+  setFavoriteEvt(cb) {
     this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, cb);
   }
 }

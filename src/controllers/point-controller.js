@@ -34,13 +34,12 @@ export default class PointController {
     this._tripEditElement.setFormSubmitEvt(() => {
       this._savePointChanges();
     });
-    this._tripEditElement.setFavoriteevent(() => {
+    this._tripEditElement.setFavoriteEvt(() => {
       this._onDataChange(data, Object.assign({}, data, {
         isFavorite: !data.isFavorite,
       }));
     });
     if (oldTripPointElement && oldTripEditElement) {
-      replaceElement(oldTripPointElement, this._tripPointElement);
       replaceElement(oldTripEditElement, this._tripEditElement);
     } else {
       renderElement(this._container, this._tripPointElement);
