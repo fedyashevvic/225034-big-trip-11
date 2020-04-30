@@ -27,6 +27,10 @@ const createRandomArr = (arr) => {
   return randomArr;
 };
 
+const returnDescription = () => {
+  return createRandomArr(descriptions).join(` `);
+};
+
 const returnTempData = () => {
   return {
     tripDescription: createRandomArr(descriptions).join(` `),
@@ -48,4 +52,4 @@ tempData.sort((a, b) => {
   return a.tripDateStart < b.tripDateStart ? -1 : 0;
 });
 
-export {tempData};
+export {tempData, returnDescription};

@@ -1,6 +1,7 @@
 import {TRANSPORT_TYPES, TRIP_DESTINATIONS, EVENT_TYPES} from "./const.js";
 import {formatTime, formateFullCreationDate} from "../utils/utils.js";
-import AbstractComponent from "./abstract-task.js";
+import {returnDescription} from "./tempData.js";
+import SmartComponent from "./smart-component.js";
 
 const returnTransportTemplate = (type) => {
   return (
@@ -51,7 +52,7 @@ const renderMultiTemplate = (arr, func) => {
 
 
 const renderTripCreationFormTamplate = (data) => {
-  const {tripDescription, tripEventType, tripImage, tripOffer, tripDateStart, tripDateEnd, tripPointTitle, isFavorite} = data;
+  const {tripDescription, tripImage, tripOffer, tripDateStart, tripDateEnd, tripEventType, tripPointTitle, isFavorite} = data;
 
   const isStartDate = tripDateStart instanceof Date ? true : false;
   const isEndDate = tripDateEnd instanceof Date ? true : false;
@@ -157,18 +158,55 @@ const renderTripCreationFormTamplate = (data) => {
   );
 };
 
-export default class TripEditComponent extends AbstractComponent {
+export default class TripEditComponent extends SmartComponent {
   constructor(data) {
     super();
     this._data = data;
+    this._submitHandler = null;
+    this._favoriteHandler = null;
+
+    this.setFavoriteEvt = this.setFavoriteEvt.bind(this);
+
+    this._subscribeOnEvents();
   }
   getTemplate() {
     return renderTripCreationFormTamplate(this._data);
   }
   setFormSubmitEvt(cb) {
     this.getElement().addEventListener(`submit`, cb);
+    this._submitHandler = cb;
   }
   setFavoriteEvt(cb) {
     this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, cb);
+    this._favoriteHandler = cb;
+  }
+  recoveryListeners() {
+    this._subscribeOnEvents();
+    this.setFormSubmitEvt(this._submitHandler);
+    this.setFavoriteEvt(this._favoriteHandler);
+  }
+  rerender() {
+    super.rerender();
+  }
+  _subscribeOnEvents() {
+    const element = this.getElement();
+    const selectors = element.querySelectorAll(`.event__type-group`);
+
+    selectors.forEach((it) => {
+      it.addEventListener(`click`, (evt) => {
+        if (evt.target.tagName !== `INPUT`) {
+          return;
+        }
+        this._data.tripEventType = evt.target.value;
+
+        this.rerender();
+      }, true);
+    });
+
+    element.querySelector(`.event__input--destination`).addEventListener(`change`, (evt) => {
+      this._data.tripPointTitle = evt.target.value;
+      this._data.tripDescription = returnDescription();
+      this.rerender();
+    });
   }
 }

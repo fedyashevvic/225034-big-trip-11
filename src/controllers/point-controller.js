@@ -14,6 +14,8 @@ export default class PointController {
     this._onDataChange = onDataChange;
     this._tripPointElement = null;
     this._tripEditElement = null;
+
+    this._savePointChanges = this._savePointChanges.bind(this);
   }
   renderPoint(data) {
     const isNextDay = currentDate.getDate() < data.tripDateStart.getDate() || currentDate === data.tripDateStart ? true : false;
