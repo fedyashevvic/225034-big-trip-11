@@ -6,14 +6,20 @@ import {tempData} from "../components/tempData.js";
 
 let dayCount = 0;
 let currentDate = tempData.length ? tempData[0].tripDateStart : ``;
+const ViewType = {
+  DEFAULT: `default`,
+  EDIT: `Edit`
+};
 
 export default class PointController {
-  constructor(container, isFirst, onDataChange) {
+  constructor(container, isFirst, onDataChange, onViewChange) {
     this._container = container;
     this._isFirstRendering = isFirst;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
     this._tripPointElement = null;
     this._tripEditElement = null;
+    this._viewType = ViewType.DEFAULT;
 
     this._savePointChanges = this._savePointChanges.bind(this);
   }
@@ -49,6 +55,8 @@ export default class PointController {
   }
 
   _editPointHandler() {
+    this._onViewChange();
+    this._viewType = ViewType.EDIT;
     replaceElement(this._tripPointElement, this._tripEditElement);
     const closeOnEsc = (evt) => {
       if (evt.key === Key.ESC) {
@@ -60,6 +68,12 @@ export default class PointController {
   }
 
   _savePointChanges() {
+    this._viewType = ViewType.DEFAULT;
     replaceElement(this._tripEditElement, this._tripPointElement);
+  }
+  onViewChange() {
+    if (this._viewType === ViewType.EDIT) {
+      this._savePointChanges();
+    }
   }
 }

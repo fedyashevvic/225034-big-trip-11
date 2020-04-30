@@ -33,9 +33,9 @@ const sortData = (type, data) => {
   return sortedPoints;
 };
 
-const renderPoints = (container, points, isFirst, onDataChange) => {
+const renderPoints = (container, points, isFirst, onDataChange, onViewChange) => {
   return points.map((point) => {
-    const pointController = new PointController(container, isFirst, onDataChange);
+    const pointController = new PointController(container, isFirst, onDataChange, onViewChange);
     pointController.renderPoint(point);
     return pointController;
   });
@@ -53,6 +53,7 @@ export default class ControllerComponent {
     this._renderedPoints = [];
 
     this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
   }
   render() {
     renderElement(pageTripInfoEl, this._tripPrice);
@@ -66,7 +67,7 @@ export default class ControllerComponent {
       this._sort.setClickListener(() => {
         this._sortHandler();
       });
-      this._renderedPoints = [].concat(renderPoints(pageTripEventsEl, this._data, this._isFirstRendering, this._onDataChange));
+      this._renderedPoints = [].concat(renderPoints(pageTripEventsEl, this._data, this._isFirstRendering, this._onDataChange, this._onViewChange));
     }
   }
   _sortHandler() {
@@ -75,7 +76,7 @@ export default class ControllerComponent {
     currentTasks.forEach((it) => it.remove());
     this._isFirstRendering = false;
 
-    this._renderedPoints = [].concat(renderPoints(pageTripEventsEl, sortedTasks, this._isFirstRendering, this._onDataChange));
+    this._renderedPoints = [].concat(renderPoints(pageTripEventsEl, sortedTasks, this._isFirstRendering, this._onDataChange, this._onViewChange));
   }
   _onDataChange(oldData, newData) {
     const index = this._data.findIndex((it) => it === oldData);
@@ -86,5 +87,10 @@ export default class ControllerComponent {
 
     this._data = [].concat(this._data.slice(0, index), newData, this._data.slice(index + 1));
     this._renderedPoints[index].renderPoint(this._data[index]);
+  }
+  _onViewChange() {
+    this._renderedPoints.forEach((point) => {
+      point.onViewChange();
+    });
   }
 }
